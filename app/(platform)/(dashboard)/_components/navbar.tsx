@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Logo } from "@/components/ui/logo";
+import { Logo } from "@/components/logo";
 import { OrganizationSwitcher, UserButton } from "@clerk/nextjs";
 import { Plus } from "lucide-react";
 import { MobileSidebar } from "./mobile-sidebar";
@@ -32,7 +32,7 @@ export const Navbar = () => {
           hidePersonal
           afterCreateOrganizationUrl="/organization/:id"
           afterSelectOrganizationUrl="/organization/:id"
-          afterLeaveOrganizationUrl="/"
+          afterLeaveOrganizationUrl="/select-org"
           appearance={{
             elements: {
               rootBox: {

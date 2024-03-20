@@ -9,5 +9,5 @@ type MobileSidebarStore = {
 export const useMobileSidebar = create<MobileSidebarStore>((set) => ({
   isOpen: false,
   onOpen: () => set({ isOpen: true }),
-  onClose: () => ({ isOpen: false }),
+  onClose: () => set({ isOpen: false }),
 }));

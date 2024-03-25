@@ -1,34 +1,35 @@
 "use client";
 
+import { useRouter, usePathname } from "next/navigation";
+import Image from "next/image";
+import { Activity, CreditCard, Layout, Settings } from "lucide-react";
+
+import { cn } from "@/lib/utils";
 import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { cn } from "@/lib/utils";
-import Image from "next/image";
-import { Activity, CreditCard, Layout, Settings } from "lucide-react";
-import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export type Organization = {
   id: string;
-  name: string;
   slug: string;
   imageUrl: string;
+  name: string;
 };
 
 interface NavItemProps {
-  isActive: boolean;
   isExpanded: boolean;
+  isActive: boolean;
   organization: Organization;
   onExpand: (id: string) => void;
 }
 
 export const NavItem = ({
-  isActive,
   isExpanded,
+  isActive,
   organization,
   onExpand,
 }: NavItemProps) => {

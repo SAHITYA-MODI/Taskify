@@ -1,6 +1,5 @@
 import { ActionState, FieldErrors } from "@/lib/create-safe-action";
 import { useCallback, useState } from "react";
-import { set } from "zod";
 
 type Action<TInput, TOutput> = (
   data: TInput
@@ -33,13 +32,16 @@ export const useAction = <TInput, TOutput>(
         if (!result) {
           return;
         }
+
         if (result.fieldErrors) {
           setFieldErrors(result.fieldErrors);
         }
+
         if (result.error) {
           setErrors(result.error);
           options.onError?.(result.error);
         }
+
         if (result.data) {
           setData(result.data);
           options.onSuccess?.(result.data);

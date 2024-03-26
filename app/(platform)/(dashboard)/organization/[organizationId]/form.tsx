@@ -1,11 +1,20 @@
 "use client";
 
 import { createBoard } from "@/actions/create-board";
-import { Button } from "@/components/ui/button";
+import { FormInput } from "@/components/form/form-input";
+import { FormSubmit } from "@/components/form/form-submit";
 import { useAction } from "@/hooks/use-action";
 
 export const Form = () => {
-  const { execute, fieldErrors } = useAction(createBoard);
+  const { execute, fieldErrors } = useAction(createBoard, {
+    onSuccess: (data) => {
+      console.log(data, "SUCCESS!");
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
   const onSubmit = (formData: FormData) => {
     const title = formData.get("title") as string;
     execute({ title });
@@ -14,24 +23,9 @@ export const Form = () => {
   return (
     <form action={onSubmit}>
       <div className="flex flex-col space-y-2">
-        <input
-          id="title"
-          name="title"
-          required
-          className="border border-black p-1"
-          placeholder="Enter a board title"
-        />
-        {fieldErrors?.title ? (
-          <div>
-            {fieldErrors.title.map((error: string) => (
-              <p className="text-rose-500" key={error}>
-                {error}
-              </p>
-            ))}
-          </div>
-        ) : null}
+        <FormInput errors={fieldErrors} id="title" label="Board Title" />
       </div>
-      <Button type="submit">Submit</Button>
+      <FormSubmit>Save</FormSubmit>
     </form>
   );
 };

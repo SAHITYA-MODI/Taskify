@@ -1,3 +1,5 @@
+"use client";
+
 import { deleteBoard } from "@/actions/delete-board";
 import { Button } from "@/components/ui/button";
 import {
@@ -45,7 +47,7 @@ export const BoardOptions = ({ id }: BoardOptionsProps) => {
           </Button>
         </PopoverClose>
         <Button
-          className="h-auto w-fullrounded-none p-2 px-5 justify-start font-normal text-sm"
+          className="h-auto w-full rounded-none p-2 px-5 justify-start font-normal text-sm"
           variant="ghost"
           onClick={onDelete}
           disabled={isLoading}

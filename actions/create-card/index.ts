@@ -23,25 +23,27 @@ const handler = async (data: InputType): Promise<ReturnType> => {
     const list = await db.list.findUnique({
       where: {
         id: listId,
-        board: { orgId },
+        board: {
+          orgId,
+        },
       },
     });
 
     if (!list) {
-      return { error: "List now found" };
+      return {
+        error: "List not found",
+      };
     }
 
     const lastCard = await db.card.findFirst({
-      where: {
-        listId,
-      },
+      where: { listId },
       orderBy: { order: "desc" },
       select: { order: true },
     });
 
     const newOrder = lastCard ? lastCard.order + 1 : 1;
 
-    const card = await db.card.create({
+    card = await db.card.create({
       data: {
         title,
         listId,
@@ -49,7 +51,9 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       },
     });
   } catch (error) {
-    return { error: "Failed to create" };
+    return {
+      error: "Failed to create.",
+    };
   }
 
   revalidatePath(`/board/${boardId}`);

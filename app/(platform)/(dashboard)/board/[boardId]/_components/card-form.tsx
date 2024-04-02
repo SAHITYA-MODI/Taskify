@@ -22,10 +22,12 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
   ({ listId, enableEditing, disableEditing, isEditing }, ref) => {
     const params = useParams();
     const formRef = useRef<ElementRef<"form">>(null);
+
     const { execute, fieldErrors } = useAction(createCard, {
       onSuccess: (data) => {
-        toast.success(`Card "${data.title}" created!`);
+        toast.success(`Card "${data.title}" created`);
         formRef.current?.reset();
+        disableEditing();
       },
       onError: (error) => {
         toast.error(error);
@@ -61,18 +63,18 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
     if (isEditing) {
       return (
         <form
-          action={onSubmit}
           ref={formRef}
+          action={onSubmit}
           className="m-1 py-0.5 px-1 space-y-4"
         >
           <FormTextarea
             id="title"
             onKeyDown={onTextareakeyDown}
-            errors={fieldErrors}
             ref={ref}
             placeholder="Enter a title for this card..."
+            errors={fieldErrors}
           />
-          <input type="text" id="listId" name="listId" value={listId} hidden />
+          <input hidden id="listId" name="listId" value={listId} />
           <div className="flex items-center gap-x-1">
             <FormSubmit>Add card</FormSubmit>
             <Button onClick={disableEditing} size="sm" variant="ghost">
@@ -87,12 +89,12 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
       <div className="pt-2 px-2">
         <Button
           onClick={enableEditing}
-          className="h-auto px-2 py-1 w-full justify-start text-muted-foreground text-sm"
+          className="h-auto px-2 py-1.5 w-full justify-start text-muted-foreground text-sm"
           size="sm"
           variant="ghost"
         >
           <Plus className="h-4 w-4 mr-2" />
-          Add a card...
+          Add a card
         </Button>
       </div>
     );

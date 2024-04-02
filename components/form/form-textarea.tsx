@@ -30,10 +30,10 @@ export const FormTextarea = forwardRef<HTMLTextAreaElement, FormTextareaProps>(
       required,
       disabled,
       errors,
-      className,
       onBlur,
       onClick,
       onKeyDown,
+      className,
       defaultValue,
     },
     ref
@@ -46,7 +46,7 @@ export const FormTextarea = forwardRef<HTMLTextAreaElement, FormTextareaProps>(
           {label ? (
             <Label
               htmlFor={id}
-              className="text-sm font-semibold text-neutral-700"
+              className="text-xs font-semibold text-neutral-700"
             >
               {label}
             </Label>
@@ -57,15 +57,15 @@ export const FormTextarea = forwardRef<HTMLTextAreaElement, FormTextareaProps>(
             onClick={onClick}
             ref={ref}
             required={required}
+            placeholder={placeholder}
             name={id}
             id={id}
-            placeholder={placeholder}
             disabled={pending || disabled}
             className={cn(
               "resize-none focus-visible:ring-0 focus-visible:ring-offset-0 ring-0 focus:ring-0 outline-none shadow-sm",
               className
             )}
-            aria-describedBy={`${id}-error`}
+            aria-describedby={`${id}-error`}
             defaultValue={defaultValue}
           />
         </div>

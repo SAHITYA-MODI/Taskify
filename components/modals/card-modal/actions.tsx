@@ -7,7 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useAction } from "@/hooks/use-action";
 import { useCardModal } from "@/hooks/use-card-modal";
 import { CardWithList } from "@/types";
-import { Copy, Delete } from "lucide-react";
+import { Copy, Delete, Trash } from "lucide-react";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
 
@@ -59,28 +59,30 @@ export const Actions = ({ data }: ActionsProps) => {
     <div className="space-y-2 mt-2">
       <p className="text-xs font-semibold">Actions</p>
       <Button
-        variant="gray"
-        size="inline"
         onClick={onCopy}
         disabled={isLoadingCopy}
+        variant="gray"
+        className="w-full justify-start"
+        size="inline"
       >
         <Copy className="h-4 w-4 mr-2" />
         Copy
       </Button>
       <Button
-        variant="gray"
-        size="inline"
         onClick={onDelete}
         disabled={isLoadingDelete}
+        variant="gray"
+        className="w-full justify-start"
+        size="inline"
       >
-        <Delete className="h-4 w-4 mr-2" />
+        <Trash className="h-4 w-4 mr-2" />
         Delete
       </Button>
     </div>
   );
 };
 
-Actions.Skeleton = function ActionSkeleton() {
+Actions.Skeleton = function ActionsSkeleton() {
   return (
     <div className="space-y-2 mt-2">
       <Skeleton className="w-20 h-4 bg-neutral-200" />

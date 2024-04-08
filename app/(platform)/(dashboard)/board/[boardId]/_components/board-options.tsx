@@ -40,17 +40,17 @@ export const BoardOptions = ({ id }: BoardOptionsProps) => {
         </div>
         <PopoverClose asChild>
           <Button
-            variant="ghost"
             className="h-auto w-auto p-2 absolute top-2 right-2 text-neutral-600"
+            variant="ghost"
           >
             <X className="h-4 w-4" />
           </Button>
         </PopoverClose>
         <Button
-          className="h-auto w-full rounded-none p-2 px-5 justify-start font-normal text-sm"
           variant="ghost"
           onClick={onDelete}
           disabled={isLoading}
+          className="rounded-none w-full h-auto p-2 px-5 justify-start font-normal text-sm"
         >
           Delete this board
         </Button>

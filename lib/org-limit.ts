@@ -2,7 +2,7 @@ import { auth } from "@clerk/nextjs";
 import { db } from "./db";
 import { MAX_FREE_BOARDS } from "@/constants/boards";
 
-export const increamentAvailableCount = async () => {
+export const incrementAvailableCount = async () => {
   const { orgId } = auth();
 
   if (!orgId) {
@@ -10,9 +10,7 @@ export const increamentAvailableCount = async () => {
   }
 
   const orgLimit = await db.orgLimit.findUnique({
-    where: {
-      orgId,
-    },
+    where: { orgId },
   });
 
   if (orgLimit) {
@@ -35,9 +33,7 @@ export const decreaseAvailableCount = async () => {
   }
 
   const orgLimit = await db.orgLimit.findUnique({
-    where: {
-      orgId,
-    },
+    where: { orgId },
   });
 
   if (orgLimit) {

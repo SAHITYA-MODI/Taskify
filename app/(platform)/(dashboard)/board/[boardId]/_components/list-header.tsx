@@ -9,12 +9,12 @@ import { toast } from "sonner";
 import { useEventListener } from "usehooks-ts";
 import { ListOptions } from "./list-options";
 
-interface ListHeaaderProps {
+interface ListHeaderProps {
   data: List;
   onAddCard: () => void;
 }
 
-export const ListHeader = ({ data, onAddCard }: ListHeaaderProps) => {
+export const ListHeader = ({ data, onAddCard }: ListHeaderProps) => {
   const [title, setTitle] = useState(data.title);
   const [isEditing, setIsEditing] = useState(false);
 
@@ -33,10 +33,6 @@ export const ListHeader = ({ data, onAddCard }: ListHeaaderProps) => {
     setIsEditing(false);
   };
 
-  const onBlur = () => {
-    formRef.current?.requestSubmit();
-  };
-
   const { execute } = useAction(updateList, {
     onSuccess: (data) => {
       toast.success(`Renamed to "${data.title}"`);
@@ -48,16 +44,24 @@ export const ListHeader = ({ data, onAddCard }: ListHeaaderProps) => {
     },
   });
 
-  const onSubmit = (formData: FormData) => {
+  const handleSubmit = (formData: FormData) => {
     const title = formData.get("title") as string;
     const id = formData.get("id") as string;
     const boardId = formData.get("boardId") as string;
 
     if (title === data.title) {
-      disableEditing();
+      return disableEditing();
     }
 
-    execute({ title, id, boardId });
+    execute({
+      title,
+      id,
+      boardId,
+    });
+  };
+
+  const onBlur = () => {
+    formRef.current?.requestSubmit();
   };
 
   const onKeyDown = (e: KeyboardEvent) => {
@@ -69,20 +73,20 @@ export const ListHeader = ({ data, onAddCard }: ListHeaaderProps) => {
   useEventListener("keydown", onKeyDown);
 
   return (
-    <div className="pt-2 px-2 text-sm font-semibold flex justify-between items-start gap-x-2">
+    <div className="pt-2 px-2 text-sm font-semibold flex justify-between items-start- gap-x-2">
       {isEditing ? (
-        <form action={onSubmit} ref={formRef} className="flex-1 px-[2px]">
+        <form ref={formRef} action={handleSubmit} className="flex-1 px-[2px]">
           <input hidden id="id" name="id" value={data.id} />
           <input hidden id="boardId" name="boardId" value={data.boardId} />
           <FormInput
             ref={inputRef}
             onBlur={onBlur}
             id="title"
-            placeholder="Enter title here..."
+            placeholder="Enter list title.."
             defaultValue={title}
             className="text-sm px-[7px] py-1 h-7 font-medium border-transparent hover:border-input focus:border-input transition truncate bg-transparent focus:bg-white"
           />
-          <button type="submit" hidden></button>
+          <button type="submit" hidden />
         </form>
       ) : (
         <div
@@ -92,7 +96,7 @@ export const ListHeader = ({ data, onAddCard }: ListHeaaderProps) => {
           {title}
         </div>
       )}
-      <ListOptions data={data} onAddCard={onAddCard} />
+      <ListOptions onAddCard={onAddCard} data={data} />
     </div>
   );
 };

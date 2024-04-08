@@ -13,11 +13,13 @@ import { createList } from "@/actions/create-list";
 import { toast } from "sonner";
 
 export const ListForm = () => {
-  const params = useParams();
   const router = useRouter();
-  const [isEditing, setIsEditing] = useState(false);
+  const params = useParams();
+
   const formRef = useRef<ElementRef<"form">>(null);
   const inputRef = useRef<ElementRef<"input">>(null);
+
+  const [isEditing, setIsEditing] = useState(false);
 
   const enableEditing = () => {
     setIsEditing(true);
@@ -30,15 +32,9 @@ export const ListForm = () => {
     setIsEditing(false);
   };
 
-  const onKeyDown = (e: KeyboardEvent) => {
-    if (e.key === "Escape") {
-      disableEditing();
-    }
-  };
-
   const { execute, fieldErrors } = useAction(createList, {
     onSuccess: (data) => {
-      toast.success(`List "${data.title}" Created`);
+      toast.success(`List "${data.title}" created`);
       disableEditing();
       router.refresh();
     },
@@ -47,14 +43,24 @@ export const ListForm = () => {
     },
   });
 
-  const onSubmit = (formData: FormData) => {
-    const title = formData.get("title") as string;
-    const boardId = formData.get("boardId") as string;
-    execute({ title, boardId });
+  const onKeyDown = (e: KeyboardEvent) => {
+    if (e.key === "Escape") {
+      disableEditing();
+    }
   };
 
   useEventListener("keydown", onKeyDown);
   useOnClickOutside(formRef, disableEditing);
+
+  const onSubmit = (formData: FormData) => {
+    const title = formData.get("title") as string;
+    const boardId = formData.get("boardId") as string;
+
+    execute({
+      title,
+      boardId,
+    });
+  };
 
   if (isEditing) {
     return (
@@ -65,16 +71,16 @@ export const ListForm = () => {
           className="w-full p-3 rounded-md bg-white space-y-4 shadow-md"
         >
           <FormInput
+            ref={inputRef}
             errors={fieldErrors}
             id="title"
-            ref={inputRef}
-            className="text-sm px-2 py-1 h-7 font-md border-transparent hover:border-input focus:border-input transition"
+            className="text-sm px-2 py-1 h-7 font-medium border-transparent hover:border-input focus:border-input transition"
             placeholder="Enter list title..."
           />
           <input hidden value={params.boardId} name="boardId" />
           <div className="flex items-center gap-x-1">
             <FormSubmit>Add list</FormSubmit>
-            <Button variant="ghost" size="sm" onClick={disableEditing}>
+            <Button onClick={disableEditing} size="sm" variant="ghost">
               <X className="h-5 w-5" />
             </Button>
           </div>
@@ -87,9 +93,9 @@ export const ListForm = () => {
     <ListWrapper>
       <button
         onClick={enableEditing}
-        className="w-full rounded-md bg-white/80 hover:bg-white/50 transition p-3 flex items-center font-md text-sm"
+        className="w-full rounded-md bg-white/80 hover:bg-white/50 transition p-3 flex items-center font-medium text-sm"
       >
-        <Plus className="w-4 h-4 mr-2" />
+        <Plus className="h-4 w-4 mr-2" />
         Add a list
       </button>
     </ListWrapper>

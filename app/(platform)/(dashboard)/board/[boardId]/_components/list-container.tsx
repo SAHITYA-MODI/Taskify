@@ -55,8 +55,7 @@ export const ListContainer = ({ data, boardId }: ListContainerProps) => {
       return;
     }
 
-    // If user drops the list at the same destination
-
+    // if dropped in the same position
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
@@ -65,7 +64,6 @@ export const ListContainer = ({ data, boardId }: ListContainerProps) => {
     }
 
     // User moves a list
-
     if (type === "list") {
       const items = reorder(orderedData, source.index, destination.index).map(
         (item, index) => ({ ...item, order: index })
@@ -76,14 +74,13 @@ export const ListContainer = ({ data, boardId }: ListContainerProps) => {
     }
 
     // User moves a card
-
     if (type === "card") {
-      const newOrderedData = [...orderedData];
+      let newOrderedData = [...orderedData];
 
+      // Source and destination list
       const sourceList = newOrderedData.find(
         (list) => list.id === source.droppableId
       );
-
       const destList = newOrderedData.find(
         (list) => list.id === destination.droppableId
       );
@@ -92,20 +89,17 @@ export const ListContainer = ({ data, boardId }: ListContainerProps) => {
         return;
       }
 
-      // Check if cards exist on the source list.
-
+      // Check if cards exists on the sourceList
       if (!sourceList.cards) {
         sourceList.cards = [];
       }
 
-      // Check if cards exist on the destination list.
-
+      // Check if cards exists on the destList
       if (!destList.cards) {
         destList.cards = [];
       }
 
       // Moving the card in the same list
-
       if (source.droppableId === destination.droppableId) {
         const reorderedCards = reorder(
           sourceList.cards,
@@ -120,31 +114,35 @@ export const ListContainer = ({ data, boardId }: ListContainerProps) => {
         sourceList.cards = reorderedCards;
 
         setOrderedData(newOrderedData);
-        executeUpdateCardOrder({ boardId: boardId, items: reorderedCards });
-      }
-
-      // User moves the card to different list
-      else {
-        // Remove card from the list
+        executeUpdateCardOrder({
+          boardId: boardId,
+          items: reorderedCards,
+        });
+        // User moves the card to another list
+      } else {
+        // Remove card from the source list
         const [movedCard] = sourceList.cards.splice(source.index, 1);
 
         // Assign the new listId to the moved card
         movedCard.listId = destination.droppableId;
 
-        // Add card to destination list
+        // Add card to the destination list
         destList.cards.splice(destination.index, 0, movedCard);
 
         sourceList.cards.forEach((card, idx) => {
           card.order = idx;
         });
 
-        // Update order for each card in destination list
+        // Update the order for each card in the destination list
         destList.cards.forEach((card, idx) => {
           card.order = idx;
         });
 
         setOrderedData(newOrderedData);
-        executeUpdateCardOrder({ boardId: boardId, items: destList.cards });
+        executeUpdateCardOrder({
+          boardId: boardId,
+          items: destList.cards,
+        });
       }
     }
   };

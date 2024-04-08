@@ -8,7 +8,7 @@ import { createSafeAction } from "@/lib/create-safe-action";
 import { CreateBoard } from "./schema";
 import { createAuditLog } from "@/lib/create-audit-log";
 import { ACTION, ENTITY_TYPE } from "@prisma/client";
-import { hasAvailableCount, increamentAvailableCount } from "@/lib/org-limit";
+import { hasAvailableCount, incrementAvailableCount } from "@/lib/org-limit";
 import { checkSubscription } from "@/lib/subscription";
 
 const handler = async (data: InputType): Promise<ReturnType> => {
@@ -31,15 +31,16 @@ const handler = async (data: InputType): Promise<ReturnType> => {
   }
 
   const { title, image } = data;
-  const [imageId, imageUserName, imageLinkHTML, imageThumbUrl, imageFullUrl] =
+
+  const [imageId, imageThumbUrl, imageFullUrl, imageLinkHTML, imageUserName] =
     image.split("|");
 
   if (
     !imageId ||
-    !imageFullUrl ||
     !imageThumbUrl ||
-    !imageLinkHTML ||
-    !imageUserName
+    !imageFullUrl ||
+    !imageUserName ||
+    !imageLinkHTML
   ) {
     return {
       error: "Missing fields. Failed to create board.",
@@ -56,13 +57,13 @@ const handler = async (data: InputType): Promise<ReturnType> => {
         imageId,
         imageThumbUrl,
         imageFullUrl,
-        imageLinkHTML,
         imageUserName,
+        imageLinkHTML,
       },
     });
 
     if (!isPro) {
-      await increamentAvailableCount();
+      await incrementAvailableCount();
     }
 
     await createAuditLog({
@@ -72,7 +73,9 @@ const handler = async (data: InputType): Promise<ReturnType> => {
       action: ACTION.CREATE,
     });
   } catch (error) {
-    return { error: "Failed to create" };
+    return {
+      error: "Failed to create.",
+    };
   }
 
   revalidatePath(`/board/${board.id}`);

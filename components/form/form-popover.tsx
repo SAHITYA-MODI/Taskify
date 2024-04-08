@@ -7,7 +7,7 @@ import {
   PopoverClose,
   PopoverContent,
   PopoverTrigger,
-} from "../ui/popover";
+} from "@/components/ui/popover";
 import { FormInput } from "./form-input";
 import { FormSubmit } from "./form-submit";
 import { useAction } from "@/hooks/use-action";
@@ -16,11 +16,11 @@ import { toast } from "sonner";
 import { FormPicker } from "./form-picker";
 import { ElementRef, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { useProdModal } from "@/hooks/use-pro-modal";
+import { useProModal } from "@/hooks/use-pro-modal";
 
 interface FormPopoverProps {
   children: React.ReactNode;
-  side?: "left" | "top" | "right" | "bottom";
+  side?: "left" | "right" | "top" | "bottom";
   align?: "start" | "center" | "end";
   sideOffset?: number;
 }
@@ -28,11 +28,10 @@ interface FormPopoverProps {
 export const FormPopover = ({
   children,
   side = "bottom",
-  sideOffset = 0,
   align,
+  sideOffset = 0,
 }: FormPopoverProps) => {
-  const proModal = useProdModal();
-
+  const proModal = useProModal();
   const router = useRouter();
   const closeRef = useRef<ElementRef<"button">>(null);
 
@@ -60,14 +59,14 @@ export const FormPopover = ({
       <PopoverTrigger asChild>{children}</PopoverTrigger>
       <PopoverContent
         align={align}
-        side={side}
         className="w-80 pt-3"
+        side={side}
         sideOffset={sideOffset}
       >
         <div className="text-sm font-medium text-center text-neutral-600 pb-4">
-          Create Board
+          Create board
         </div>
-        <PopoverClose asChild ref={closeRef}>
+        <PopoverClose ref={closeRef} asChild>
           <Button
             className="h-auto w-auto p-2 absolute top-2 right-2 text-neutral-600"
             variant="ghost"
@@ -85,7 +84,7 @@ export const FormPopover = ({
               errors={fieldErrors}
             />
           </div>
-          <FormSubmit className="w-full">Submit</FormSubmit>
+          <FormSubmit className="w-full">Create</FormSubmit>
         </form>
       </PopoverContent>
     </Popover>

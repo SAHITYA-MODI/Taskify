@@ -3,7 +3,7 @@
 import { stripeRedirect } from "@/actions/stripe-redirect";
 import { Button } from "@/components/ui/button";
 import { useAction } from "@/hooks/use-action";
-import { useProdModal } from "@/hooks/use-pro-modal";
+import { useProModal } from "@/hooks/use-pro-modal";
 import { toast } from "sonner";
 
 interface SubscriptionButtonProps {
@@ -11,7 +11,7 @@ interface SubscriptionButtonProps {
 }
 
 export const SubscriptionButton = ({ isPro }: SubscriptionButtonProps) => {
-  const proModal = useProdModal();
+  const proModal = useProModal();
   const { execute, isLoading } = useAction(stripeRedirect, {
     onSuccess: (data) => {
       window.location.href = data;
